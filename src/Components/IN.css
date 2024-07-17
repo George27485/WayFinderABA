@@ -1,0 +1,132 @@
+/* General styles */
+.identify-name {
+    position: flex;
+    text-align: center;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: black;
+  }
+  
+  /* Input section */
+  .input-section {
+    margin-bottom: 20px;
+  }
+  
+  .input-section input {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    border: 2px solid #ddd;
+    font-size: 1em;
+  }
+  
+  .input-section button {
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    border: none;
+    background-color: #ffcb77;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .input-section button:hover {
+    background-color: #ffb347;
+  }
+  
+  /* Stimuli section */
+  .stimuli-section {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .stimulus-card {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, border 0.3s, transform 0.3s;
+    font-size: 1.5em;
+  }
+  
+  .stimulus-card:hover {
+    transform: scale(1.1);
+  }
+  
+  .correct-answer {
+    border: 2px solid green;
+  }
+  
+  /* Shaking effect */
+  .shake {
+    animation: shake 0.5s;
+  }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+  }
+  
+  /* Wrong answer prompt */
+  .wrong {
+    font-size: 5em;
+    color: red;
+    animation: appear-disappear 2s;
+  }
+  
+  @keyframes appear-disappear {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+  
+  /* Slider container */
+  .slider-container {
+    margin: 20px;
+    padding: 10px;
+    background-color: #e0f7fa;
+    border-radius: 10px;
+    border: 2px solid #00acc1;
+  }
+  
+  .slider-container p {
+    font-size: 1.2em;
+  }
+  
+  /* Buttons */
+  button {
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: #ff6f61;
+    font-size: 1em;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #e55b52;
+  }
+  
+  /* Confetti container */
+  .confetti-container {
+    position: relative;
+    height: 100px;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+  
