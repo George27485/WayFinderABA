@@ -128,4 +128,48 @@
     overflow: hidden;
     margin-top: 20px;
   }
+  .identify-name {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .input-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .stimuli-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .stimulus-card {
+    padding: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    user-select: none;
+  }
+  
+  .slider-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  button {
+    margin: 5px;
+  }
+  
+  .top-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
   

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Confetti from 'react-confetti';
-import './IN.css';
 import InputSlider from 'react-input-slider';
 
 const IdentifyName = () => {
@@ -13,18 +12,29 @@ const IdentifyName = () => {
   const [newCorrectAnswer, setNewCorrectAnswer] = useState('');
   const [showInputSection, setShowInputSection] = useState(true);
   const [showCorrectAnswerBorder, setShowCorrectAnswerBorder] = useState(false);
-  const [sliderValue, setSliderValue] = useState(0); // Initial slider value for color intensity
+  const [sliderValue, setSliderValue] = useState(0);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for dropdown
 
   useEffect(() => {
     let timer;
     if (showConfetti) {
       timer = setTimeout(() => {
         setShowConfetti(false);
-        setSelected(null); // Reset selected stimulus after confetti display
-      }, 10000); // Adjust the duration as needed (e.g., 10000ms = 10 seconds)
+        setSelected(null);
+      }, 5000);
     }
     return () => clearTimeout(timer);
   }, [showConfetti]);
+
+  useEffect(() => {
+    let xTimer;
+    if (selected !== null && selected !== correctAnswer) {
+      xTimer = setTimeout(() => {
+        setSelected(null);
+      }, 2000); 
+    }
+    return () => clearTimeout(xTimer);
+  }, [selected, correctAnswer]);
 
   const handleSelect = (stimulus) => {
     if (stimulus === correctAnswer) {
@@ -56,37 +66,47 @@ const IdentifyName = () => {
     setShowCorrectAnswerBorder(!showCorrectAnswerBorder);
   };
 
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const closeDropdown = () => {
+    setIsDropdownOpen(false);
+  };
+
   return (
-    <div className={`identify-name ${isShaking ? 'shake' : ''}`}>
+    <div className={`identify-name ${isShaking ? 'shake' : ''} w-screen h-screen flex flex-col items-center justify-center bg-orange-100`}>
       {showInputSection && (
-        <div className="input-section">
+        
+        <div className="input-section mb-4">
           <input
             type="text"
             value={newStimulus}
             onChange={(e) => setNewStimulus(e.target.value)}
             placeholder="Add new stimulus"
+            className="border border-red-400 p-2 mr-2 rounded-lg"
           />
-          <button onClick={handleAddStimulus}>Add Stimulus</button>
+          <button onClick={handleAddStimulus} className="bg-blue-500 text-white p-2 mr-2 rounded-lg">Add Stimulus</button>
           <input
             type="text"
             value={newCorrectAnswer}
             onChange={(e) => setNewCorrectAnswer(e.target.value)}
             placeholder="Set correct answer"
+            className="border border-gray-400 p-2 mr-2 rounded-lg"
           />
-          <button onClick={handleSetCorrectAnswer}>Set Correct Answer</button>
+          <button onClick={handleSetCorrectAnswer} className="bg-blue-500 text-white p-2 rounded-lg">Set Correct Answer</button>
         </div>
       )}
-      <div className="stimuli-section">
+      <div className="stimuli-section flex flex-wrap gap-4">
         {stimuli.map((stimulus, index) => (
           <div
             key={index}
-            className={`stimulus-card ${stimulus === correctAnswer ? 'correct-answer' : ''}`}
+            className={`stimulus-card p-4 flex items-center justify-center cursor-pointer rounded-2xl bg-white text-black`}
             onClick={() => handleSelect(stimulus)}
             style={{
-              backgroundColor:
-                showCorrectAnswerBorder && stimulus === correctAnswer
-                  ? `rgba(0, 255, 0, ${sliderValue / 100})`
-                  : '#f0f0f0',
+              backgroundColor: stimulus === correctAnswer && showCorrectAnswerBorder
+                ? sliderValue > 0 ? `rgba(0, 255, 0, ${sliderValue / 100})` : 'white'
+                : '#fff',
               border: showCorrectAnswerBorder && stimulus === correctAnswer ? '2px solid green' : '1px solid #ccc',
             }}
           >
@@ -96,27 +116,39 @@ const IdentifyName = () => {
       </div>
       {showConfetti && <Confetti />}
       {selected !== null && selected !== correctAnswer && (
-        <div className="confetti-container">
-          <div className="wrong">X</div>
+        <div className="confetti-container fixed inset-0 flex items-center justify-center">
+          <div className="wrong text-6xl text-red-600">X</div>
         </div>
       )}
-      <button onClick={reshuffleStimuli}>Reshuffle</button>
-      <button onClick={() => setShowInputSection(!showInputSection)}>
-        {showInputSection ? 'Hide Input' : 'Show Input'}
+      <button
+        onClick={toggleDropdown}
+        className="bg-yellow-500 text-white p-2 m-4 rounded-lg absolute top-12 left-0 z-1"
+      >
+        Toggle Options
       </button>
-      <div className="slider-container">
-        <InputSlider
-          axis="x"
-          x={sliderValue}
-          onChange={({ x }) => setSliderValue(x)}
-          xmin={0}
-          xmax={100}
-        />
-        <p>Prompt Intensity: {sliderValue}</p>
-      </div>
-      <button onClick={toggleCorrectAnswerBorder}>
-        {showCorrectAnswerBorder ? 'UnToggle Prompt' : 'Toggle Prompt'}
-      </button>
+      {isDropdownOpen && (
+        <div className="dropdown-menu mt-2 p-4 bg-white shadow-lg rounded-lg border border-gray-300 absolute top-12 left-0">
+          <button onClick={reshuffleStimuli} className="bg-yellow-500 text-white p-2 m-2 rounded-lg w-full">Reshuffle</button>
+          <button onClick={() => setShowInputSection(!showInputSection)} className="bg-yellow-500 text-white p-2 m-2 rounded-lg w-full">
+            {showInputSection ? 'Hide Input' : 'Show Input'}
+          </button>
+          <div className="slider-container my-4">
+            <InputSlider
+              axis="x"
+              x={sliderValue}
+              onChange={({ x }) => setSliderValue(x)}
+              xmin={0}
+              xmax={100}
+            />
+            <p className='text-black'> Prompt Intensity: {sliderValue}</p>
+          </div>
+          <button onClick={toggleCorrectAnswerBorder} className="bg-red-500 text-white p-2 m-2 rounded-lg w-full">
+            {showCorrectAnswerBorder ? 'Untoggle Prompt' : 'Toggle Prompt'}
+          </button>
+          <button onClick={closeDropdown} className="bg-gray-500 text-white p-2 m-2 rounded-lg w-full">Exit</button>
+        </div>
+      )}
+      
     </div>
   );
 };
