@@ -11,7 +11,7 @@ const NavBar = () => {
             to="/identify-name" 
             className="text-gray-300 hover:text-white transition-colors"
           >
-            Identify Words
+            Finder
           </NavLink>
           <NavLink 
             to="/identify-object" 

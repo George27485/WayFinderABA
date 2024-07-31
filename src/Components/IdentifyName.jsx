@@ -13,7 +13,8 @@ const IdentifyName = () => {
   const [showInputSection, setShowInputSection] = useState(true);
   const [showCorrectAnswerBorder, setShowCorrectAnswerBorder] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for dropdown
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isScrollLocked, setIsScrollLocked] = useState(false);
 
   useEffect(() => {
     let timer;
@@ -31,10 +32,18 @@ const IdentifyName = () => {
     if (selected !== null && selected !== correctAnswer) {
       xTimer = setTimeout(() => {
         setSelected(null);
-      }, 2000); 
+      }, 2000);
     }
     return () => clearTimeout(xTimer);
   }, [selected, correctAnswer]);
+
+  useEffect(() => {
+    if (isScrollLocked) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isScrollLocked]);
 
   const handleSelect = (stimulus) => {
     if (stimulus === correctAnswer) {
@@ -74,10 +83,13 @@ const IdentifyName = () => {
     setIsDropdownOpen(false);
   };
 
+  const toggleScrollLock = () => {
+    setIsScrollLocked(!isScrollLocked);
+  };
+
   return (
     <div className={`identify-name ${isShaking ? 'shake' : ''} w-screen h-screen flex flex-col items-center justify-center bg-orange-100`}>
       {showInputSection && (
-        
         <div className="input-section mb-4">
           <input
             type="text"
@@ -104,10 +116,12 @@ const IdentifyName = () => {
             className={`stimulus-card p-4 flex items-center justify-center cursor-pointer rounded-2xl bg-white text-black`}
             onClick={() => handleSelect(stimulus)}
             style={{
+              width: '300px', 
+              height: '300px', 
               backgroundColor: stimulus === correctAnswer && showCorrectAnswerBorder
                 ? sliderValue > 0 ? `rgba(0, 255, 0, ${sliderValue / 100})` : 'white'
                 : '#fff',
-              border: showCorrectAnswerBorder && stimulus === correctAnswer ? '2px solid green' : '1px solid #ccc',
+              border: showCorrectAnswerBorder && stimulus === correctAnswer ? '5px solid green' : '1px solid #ccc',
             }}
           >
             {stimulus}
@@ -145,10 +159,12 @@ const IdentifyName = () => {
           <button onClick={toggleCorrectAnswerBorder} className="bg-red-500 text-white p-2 m-2 rounded-lg w-full">
             {showCorrectAnswerBorder ? 'Untoggle Prompt' : 'Toggle Prompt'}
           </button>
+          <button onClick={toggleScrollLock} className="bg-green-500 text-white p-2 m-2 rounded-lg w-full">
+            {isScrollLocked ? 'Unlock Scroll' : 'Lock Scroll'}
+          </button>
           <button onClick={closeDropdown} className="bg-gray-500 text-white p-2 m-2 rounded-lg w-full">Exit</button>
         </div>
       )}
-      
     </div>
   );
 };
